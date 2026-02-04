@@ -1,0 +1,58 @@
+pipeline {
+    agent any
+
+    environment {
+        //Windows uses backslashes . Double backslashes are required in Groovy strings.
+        JMTER_HOME = "Jmeter path"
+        TEST_PLAN + 'jmx file'
+
+        //correctly appending JMTER bin to windows Path 
+        PATH = "${env.JMETER_HOME}\\bin;${env.PATH}"
+    }
+
+       stages {
+        stage('1- Checkout') {
+            steps {
+            //note: ensure 'jmeter_practtice-admin' is using an API Token, not a password
+            git branch 'master', 
+               url: "git repo path"
+        }
+       }
+
+         stage('2-Build') {
+            steps {
+                echo "Preparing Windows environmnet..."
+                bat"""
+                @echo off
+                REM Create results folder if missing (Windows syntax)
+                if exist test_results.jtl del /f /q test_results.jtl
+
+                REM Clean up old HTML reports 
+                if exist jmeter-report rmdir /s /q jmeter-report
+
+                REM Verify JMeter version
+                call jmeter -v
+                """
+            }
+         }
+         stage('3- Test') {
+            steps {
+                echo "Execution Jmeter Test (NOn-GUI)..."
+                //Using 'call' ensure the script continue after jmeter finishes
+                bat "call jmeter -n -t %TEST_PLAN% -l test_results.jtl -e -o jmeter-report"
+            }
+         }
+         stage('4- Publish Performance Report') {
+            steps{
+                //This requires the 'Performance Plugin' installed in Jenkins
+                perfReport sourceDataFiles: "test_results.jtl"
+            }
+         }
+       }
+       post {
+        always {
+            //Archives the JTL from the workspace root
+            archiveArtifacts artifacts: 'test-results.jtl', allowEmptyArchive: true 
+        }
+        }
+        }
