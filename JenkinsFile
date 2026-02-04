@@ -3,8 +3,8 @@ pipeline {
 
     environment {
         //Windows uses backslashes . Double backslashes are required in Groovy strings.
-        JMTER_HOME = "Jmeter path"
-        TEST_PLAN + 'jmx file'
+        JMTER_HOME = "D:\\Jmeter\\apache-jmeter\\apache-jmeter-5.6.3"
+        TEST_PLAN + 'firsttestdemo.jmx'
 
         //correctly appending JMTER bin to windows Path 
         PATH = "${env.JMETER_HOME}\\bin;${env.PATH}"
@@ -15,7 +15,7 @@ pipeline {
             steps {
             //note: ensure 'jmeter_practtice-admin' is using an API Token, not a password
             git branch 'master', 
-               url: "git repo path"
+               url: "https://github.com/Kundans17/kundan_Jmeter_Prac_Repo.git"
         }
        }
 
