@@ -14,7 +14,7 @@ pipeline {
         stage('1- Checkout') {
             steps {
             //note: ensure 'jmeter_practtice-admin' is using an API Token, not a password
-            git branch 'master', 
+            git branch: 'master', 
                url: "https://github.com/Kundans17/kundan_Jmeter_Prac_Repo.git"
         }
        }
