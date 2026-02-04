@@ -4,7 +4,7 @@ pipeline {
     environment {
         //Windows uses backslashes . Double backslashes are required in Groovy strings.
         JMTER_HOME = "D:\\Jmeter\\apache-jmeter\\apache-jmeter-5.6.3"
-        TEST_PLAN + 'firsttestdemo.jmx'
+        TEST_PLAN = 'firsttestdemo.jmx'
 
         //correctly appending JMTER bin to windows Path 
         PATH = "${env.JMETER_HOME}\\bin;${env.PATH}"
